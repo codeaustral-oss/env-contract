@@ -27,3 +27,12 @@ test('reports missing and invalid variables', () => {
   assert.equal(result.issues.some((issue) => issue.name === 'WORKERS'), true)
   assert.equal(result.issues.some((issue) => issue.name === 'EXTRA' && issue.level === 'warning'), true)
 })
+
+test('can treat unknown variables as strict errors', () => {
+  const rules = parseContract('PORT type=integer')
+  const env = parseEnv('PORT=3000\nEXTRA=true')
+  const result = validateEnv(rules, env, { strictUnknown: true })
+
+  assert.equal(result.ok, false)
+  assert.deepEqual(result.issues.map((issue) => issue.level), ['error'])
+})

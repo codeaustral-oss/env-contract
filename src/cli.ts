@@ -6,23 +6,29 @@ type Args = {
   contract: string
   env: string
   json: boolean
+  strict: boolean
   help: boolean
 }
 
 function parseArgs(argv: string[]): Args {
-  const args: Args = { contract: 'env.contract', env: '.env', json: false, help: false }
+  const args: Args = { contract: 'env.contract', env: '.env', json: false, strict: false, help: false }
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index]
     if (arg === '--help' || arg === '-h') args.help = true
+    else if (arg === '--version' || arg === '-v') {
+      console.log('0.1.0')
+      process.exit(0)
+    }
     else if (arg === '--contract') args.contract = argv[++index] ?? args.contract
     else if (arg === '--env') args.env = argv[++index] ?? args.env
     else if (arg === '--json') args.json = true
+    else if (arg === '--strict') args.strict = true
   }
   return args
 }
 
 function help(): void {
-  console.log(`env-contract [--contract env.contract] [--env .env] [--json]
+  console.log(`env-contract [--contract env.contract] [--env .env] [--strict] [--json]
 
 Contract syntax:
   DATABASE_URL type=url required=true
@@ -39,7 +45,7 @@ if (args.help) {
 
 const rules = parseContract(readFileSync(args.contract, 'utf8'))
 const env = parseEnv(readFileSync(args.env, 'utf8'))
-const result = validateEnv(rules, env)
+const result = validateEnv(rules, env, { strictUnknown: args.strict })
 
 if (args.json) {
   console.log(JSON.stringify(result, null, 2))

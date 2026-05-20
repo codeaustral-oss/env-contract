@@ -21,6 +21,10 @@ export type EnvValidationResult = {
   checked: number
 }
 
+export type ValidateEnvOptions = {
+  strictUnknown?: boolean
+}
+
 export function parseContract(input: string): EnvRule[] {
   return input
     .split(/\r?\n/)
@@ -44,7 +48,7 @@ export function parseEnv(input: string): Record<string, string> {
   return values
 }
 
-export function validateEnv(rules: EnvRule[], env: Record<string, string>): EnvValidationResult {
+export function validateEnv(rules: EnvRule[], env: Record<string, string>, options: ValidateEnvOptions = {}): EnvValidationResult {
   const issues: EnvIssue[] = []
 
   for (const rule of rules) {
@@ -67,7 +71,11 @@ export function validateEnv(rules: EnvRule[], env: Record<string, string>): EnvV
   const known = new Set(rules.map((rule) => rule.name))
   for (const key of Object.keys(env)) {
     if (!known.has(key)) {
-      issues.push({ name: key, level: 'warning', message: 'variable is not declared in the contract' })
+      issues.push({
+        name: key,
+        level: options.strictUnknown ? 'error' : 'warning',
+        message: 'variable is not declared in the contract',
+      })
     }
   }
 

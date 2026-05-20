@@ -1,5 +1,8 @@
 # Env Contract
 
+[![CI](https://github.com/codeaustral-oss/env-contract/actions/workflows/ci.yml/badge.svg)](https://github.com/codeaustral-oss/env-contract/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 Validate `.env` files against a tiny, readable environment contract.
 
 ## Why
@@ -21,6 +24,7 @@ Use `?` after the variable name for optional values.
 
 ```bash
 npx env-contract --contract env.contract --env .env
+npx env-contract --strict
 ```
 
 JSON output:
@@ -36,6 +40,8 @@ import { parseContract, parseEnv, validateEnv } from 'env-contract'
 
 const result = validateEnv(parseContract(contractText), parseEnv(envText))
 ```
+
+Use `--strict` or `validateEnv(rules, env, { strictUnknown: true })` when undeclared environment variables should fail CI instead of warning.
 
 ## Supported types
 
