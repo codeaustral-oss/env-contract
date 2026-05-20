@@ -1,0 +1,40 @@
+{
+  "name": "env-contract",
+  "version": "0.1.0",
+  "description": "Validate .env files against a small, readable environment contract.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/codeaustral-oss/env-contract",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeaustral-oss/env-contract.git"
+  },
+  "keywords": [
+    "env",
+    "dotenv",
+    "configuration",
+    "validation",
+    "cli",
+    "typescript"
+  ],
+  "bin": {
+    "env-contract": "./dist/cli.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "typescript": "^5.9.3"
+  }
+}
